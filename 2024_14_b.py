@@ -9,7 +9,7 @@ def printgrid(drawwidth: int, drawheight: int, datapoints: tuple, elapsed):
     # print(datapoints)
     os.system("cls")
 
-    print(f"Displaying {elapsed} itteration")
+    print(f"Displaying {elapsed} itteration, of {len(datapoints)} datapoints")
     for y in range(drawheight):
         currentline = ""
         for x in range(drawwidth):
@@ -27,15 +27,15 @@ def checkgrid(drawwidth: int, drawheight: int, datapoints: tuple, elapsed) -> bo
     treefound = False
 
     print(f"Displaying {elapsed} itteration")
+    printgrid(drawwidth, drawheight, datapoints, elapsed)
     for y in range(drawheight):
         currentline = ""
         for x in range(drawwidth):
-
             if [x, y] in datapoints:
-                currentline = currentline + "1"
+                currentline = currentline + "#"
             else:
-                currentline = currentline + "."
-        treefound = "11111111" in currentline
+                currentline = currentline + " "
+        treefound = "#########" in currentline
         if treefound:
             break
     return treefound
@@ -52,7 +52,7 @@ def main():
 
     fullhight = 103
     fullwidth = 101
-    seconds = 0
+    seconds = 1990
 
     robots = []
     deltas = []
@@ -61,9 +61,9 @@ def main():
     for eachmachine in datafile:
         regex = r"p=(\d+),(\d+) v=(-?\d+),(-?\d+)"
         px, py, vx, vy = [int(v) for v in re.findall(regex, eachmachine)[0]]
-
         robots.append([px, py])
         deltas.append([vx, vy])
+
     found = False
     while not found:
         newrobots = []
@@ -71,8 +71,9 @@ def main():
             newx = (onerobot[0] + (deltas[index][0] * seconds)) % fullwidth
             newy = (onerobot[1] + (deltas[index][1] * seconds)) % fullhight
             newrobots.append([newx, newy])
-            seconds += 1
-            found = checkgrid(fullwidth, fullhight, newrobots, seconds)
+
+        seconds += 1
+        found = checkgrid(fullwidth, fullhight, newrobots, seconds)
 
     printgrid(fullwidth, fullhight, newrobots, seconds)
     print(f"Tree found after {seconds}s")
