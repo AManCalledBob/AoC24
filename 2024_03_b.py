@@ -10,7 +10,8 @@ def main():
     """Main Function"""
 
     with open(
-        f"{os.path.basename(__file__).split('.')[0]}_input_data.txt", encoding="utf-8"
+        f"{os.path.basename(__file__).split('.')[0][:-2]}_input_data.txt",
+        encoding="utf-8",
     ) as input_file:
         datafile = str(input_file.read().splitlines())
 

@@ -9,7 +9,7 @@ def printgrid(drawwidth: int, drawheight: int, datapoints: tuple, elapsed):
     # print(datapoints)
     os.system("cls")
 
-    print(f"Displaying {elapsed} itteration")
+    print(f"Displaying {elapsed} itteration, of {len(datapoints)} datapoints")
     for y in range(drawheight):
         currentline = ""
         for x in range(drawwidth):
@@ -27,23 +27,17 @@ def checkgrid(drawwidth: int, drawheight: int, datapoints: tuple, elapsed) -> bo
     treefound = False
 
     print(f"Displaying {elapsed} itteration")
+    # printgrid(drawwidth, drawheight, datapoints, elapsed)
     for y in range(drawheight):
         currentline = ""
         for x in range(drawwidth):
-
             if [x, y] in datapoints:
-                currentline = currentline + "1"
+                currentline = currentline + "#"
             else:
-                currentline = currentline + "."
-        treefound = "111111111" in currentline
+                currentline = currentline + " "
+        treefound = "#########" in currentline
         if treefound:
-            #     print("Here")
-            # regex = r"\D+\d{4}\D+"
-            # treefound = treefound or re.match(regex, currentline)
-            # if treefound:
             break
-        #
-    # print()
     return treefound
 
 
@@ -67,23 +61,20 @@ def main():
     for eachmachine in datafile:
         regex = r"p=(\d+),(\d+) v=(-?\d+),(-?\d+)"
         px, py, vx, vy = [int(v) for v in re.findall(regex, eachmachine)[0]]
-
         robots.append([px, py])
         deltas.append([vx, vy])
+
     found = False
     while not found:
-
+        seconds += 1
+        newrobots = []
         for index, onerobot in enumerate(robots):
             newx = (onerobot[0] + (deltas[index][0] * seconds)) % fullwidth
             newy = (onerobot[1] + (deltas[index][1] * seconds)) % fullhight
-            # print(f"Robot {index} from {onerobot[0][0],onerobot[0][1]} to {newx, newy}")
-            robots[index] = [newx, newy]
+            newrobots.append([newx, newy])
+        found = checkgrid(fullwidth, fullhight, newrobots, seconds)
 
-        seconds += 1
-
-        found = checkgrid(fullwidth, fullhight, robots, seconds)
-
-    printgrid(fullwidth, fullhight, robots, seconds)
+    printgrid(fullwidth, fullhight, newrobots, seconds)
     print(f"Tree found after {seconds}s")
 
 
