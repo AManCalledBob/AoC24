@@ -35,15 +35,9 @@ def checkgrid(drawwidth: int, drawheight: int, datapoints: tuple, elapsed) -> bo
                 currentline = currentline + "1"
             else:
                 currentline = currentline + "."
-        treefound = "111111111" in currentline
+        treefound = "11111111" in currentline
         if treefound:
-            #     print("Here")
-            # regex = r"\D+\d{4}\D+"
-            # treefound = treefound or re.match(regex, currentline)
-            # if treefound:
             break
-        #
-    # print()
     return treefound
 
 
@@ -72,18 +66,15 @@ def main():
         deltas.append([vx, vy])
     found = False
     while not found:
-
+        newrobots = []
         for index, onerobot in enumerate(robots):
             newx = (onerobot[0] + (deltas[index][0] * seconds)) % fullwidth
             newy = (onerobot[1] + (deltas[index][1] * seconds)) % fullhight
-            # print(f"Robot {index} from {onerobot[0][0],onerobot[0][1]} to {newx, newy}")
-            robots[index] = [newx, newy]
+            newrobots.append([newx, newy])
+            seconds += 1
+            found = checkgrid(fullwidth, fullhight, newrobots, seconds)
 
-        seconds += 1
-
-        found = checkgrid(fullwidth, fullhight, robots, seconds)
-
-    printgrid(fullwidth, fullhight, robots, seconds)
+    printgrid(fullwidth, fullhight, newrobots, seconds)
     print(f"Tree found after {seconds}s")
 
 

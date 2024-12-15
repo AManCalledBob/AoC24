@@ -11,9 +11,7 @@ right_list = []
 def main():
     """Main Function"""
 
-    with open(
-        f"{os.path.basename(__file__).split('.')[0]}_input_data.txt", encoding="utf-8"
-    ) as input_file:
+    with open(f"{os.path.basename(__file__).split('.')[0]}_input_data.txt", encoding="utf-8") as input_file:
         datastream = list(map(int, input_file.read().splitlines()))
         # datastream = input_file.read().splitlines()
 
