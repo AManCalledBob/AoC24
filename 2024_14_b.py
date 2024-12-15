@@ -27,7 +27,7 @@ def checkgrid(drawwidth: int, drawheight: int, datapoints: tuple, elapsed) -> bo
     treefound = False
 
     print(f"Displaying {elapsed} itteration")
-    printgrid(drawwidth, drawheight, datapoints, elapsed)
+    # printgrid(drawwidth, drawheight, datapoints, elapsed)
     for y in range(drawheight):
         currentline = ""
         for x in range(drawwidth):
@@ -52,7 +52,7 @@ def main():
 
     fullhight = 103
     fullwidth = 101
-    seconds = 1990
+    seconds = 0
 
     robots = []
     deltas = []
@@ -66,13 +66,12 @@ def main():
 
     found = False
     while not found:
+        seconds += 1
         newrobots = []
         for index, onerobot in enumerate(robots):
             newx = (onerobot[0] + (deltas[index][0] * seconds)) % fullwidth
             newy = (onerobot[1] + (deltas[index][1] * seconds)) % fullhight
             newrobots.append([newx, newy])
-
-        seconds += 1
         found = checkgrid(fullwidth, fullhight, newrobots, seconds)
 
     printgrid(fullwidth, fullhight, newrobots, seconds)
