@@ -3,8 +3,16 @@
 # pylint: disable=line-too-long
 import os
 import operator
-
+import matplotlib.pyplot as plt
+import numpy as np
 from collections import deque
+
+
+def draw_maze(maze):
+    maze_array = np.array(maze)
+    plt.imshow(maze_array, cmap="binary")
+    plt.xticks([]), plt.yticks([])  # Hide the axes ticks
+    plt.show()
 
 
 def bfs(maze, start, end):
@@ -34,6 +42,25 @@ def bfs(maze, start, end):
     return path
 
 
+def calc_cost(thepath: list, pos: tuple) -> int:
+    total = 0
+    # Directions: up, down, left, right
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    dir = 2
+    for nextloc in thepath:
+        print(pos, nextloc)
+        differance = tuple(map(operator.sub, nextloc, pos))
+        if differance in directions:
+            newdir = directions.index(differance)
+            if newdir == dir:
+                total += 1
+            else:
+                total += 1000
+                dir = newdir
+        pos = nextloc
+    return total
+
+
 def main():
     """Main Function"""
 
@@ -42,6 +69,29 @@ def main():
         encoding="utf-8",
     ) as input_file:
         datafile = input_file.read().splitlines()
+
+    maze = []
+
+    for y, oneline in enumerate(datafile):
+        currentline = []
+        for x, onechar in enumerate(oneline):
+            match onechar:
+                case "#":
+                    currentline.append(1)
+                case ".":
+                    currentline.append(0)
+                case "S":
+                    currentline.append(0)
+                    start_point = (y, x)
+                case "E":
+                    currentline.append(0)
+                    end_point = (y, x)
+        maze.append(currentline)
+
+    # draw_maze(maze)
+
+    path = bfs(maze, start_point, end_point)
+    print(f"The route cost is {calc_cost(path, start_point)}")
 
 
 # https://sqlpad.io/tutorial/python-maze-solver/
