@@ -45,7 +45,7 @@ def main():
         memory = list(map(int, part2[9:].split(",")))
 
         no_match = True
-        regindex = 999000000000000
+        regindex = 216584205979000
         target = ",".join(map(str, memory))
         while no_match:
             answer = run_program(regindex, regB, regC, memory)
