@@ -15,16 +15,20 @@ def main():
     ) as input_file:
         datafile = str(input_file.read().splitlines())
 
-    # Consume between don't and do
-    result = str(re.sub(r"don't.*?do", "", datafile, 0))
+    total = 0
+    shouldadd = True
+    for matches in re.finditer(r"do\(\)|don\'t\(\)|mul\((\d{1,3}+),(\d+)\)", datafile):
+        print(f"Working with {matches[0]}")
+        match matches[0]:
+            case "do()":
+                shouldadd = True
+            case "don't()":
+                shouldadd = False
+            case _:
+                if shouldadd:
+                    total += int(matches[1]) * int(matches[2])
 
-    matches = re.findall(r"mul\(\d+,\d+\)", result)
-
-    subtotal = 0
-    for eachmatch in matches:
-        left, right = eachmatch[4:-1].split(",")
-        subtotal += int(left) * int(right)
-    print(f"The total is {subtotal}")
+    print(f"The total is {total}")
 
 
 if __name__ == "__main__":
